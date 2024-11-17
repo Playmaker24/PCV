@@ -1,0 +1,52 @@
+\documentclass{article}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{PCV Exercise 2}
+\author{Dennis Ries(487678), }
+
+\begin{document}
+\maketitle
+
+\section{Theory}
+\subsection*{If x is an ideal point and H is some homography, is x’=Hx also always an
+ideal point? What about an ideal line l? How do you interpret the result
+geometrically?} 
+Neither ideal points nor ideal lines necessarily stay ideal in a homography. Many simple transformations, like translation or rotation, are homographies, but they do not affect $w$ and thus cannot influence whether a point/line is ideal or not.
+However, it is possible to end up with non-ideal points/lines in a homography, if it is or contains a perspective transformation. In this case, geometrically speaking, a vanishing point for ideal points or the horizon for the ideal line is now part of the visible scene.
+
+\subsection*{How many distinct ideal points exist? How many distinct ideal lines exist?} 
+For any given Homography, there are an infinite amount of ideal points, which all are part of a single ideal line.
+
+\subsection*{Let l=(a, b, c) be a line. Give a formula for the following line representations}
+
+\subsection*{What is a Homography?}
+A Homography is any projective transformation which preserves straight lines and is invertible.
+
+\subsection*{Which conditions on the image acquisition have to be fulfilled in order to
+model the image transformation successfully as a 2D homography ?}
+
+\subsection*{How many degrees of freedom does a 2D homography have?}
+A 2D Homography is a $3 \times 3$ Matrix, affecting homogeneous coordinates, leading to 9 variables. However, we can reduce this to 8, as $H$ and $\lambda H$ affect homogeneous coordinates the same way. So if we divide $H$ $h_{3,3}$, we end up with a Matrix with 8 Degrees of freedom, without changing the transformation itself: 
+$$\begin{pmatrix}
+a & b & c\\
+d & e & f \\
+g & h & 1
+\end{pmatrix}$$
+
+\subsection*{Why should the homogeneous points be normalized before creating the
+design matrix?}
+Making sure the points all have the same scale, improves numerical stability. Addition and Multiplication of very large and very small numbers leads to significant errors in floating point arithmetic.
+\subsection*{What are possible reasons the images don’t align perfectly?}
+\end{document}
