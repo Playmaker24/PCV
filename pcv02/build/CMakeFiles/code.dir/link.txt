@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcode.a CMakeFiles/code.dir/Pcv2.cpp.o CMakeFiles/code.dir/Helper.cpp.o
+/usr/bin/ranlib libcode.a
