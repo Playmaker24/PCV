@@ -14,7 +14,7 @@
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
 \title{PCV Exercise 2}
-\author{Dennis Ries(487678), }
+\author{Bao Duc Cao(395964), Francesco Cherubini(0515856), \\Dennis Ries(487678), Raymond Wihartono(395063) }
 
 \begin{document}
 \maketitle
@@ -30,13 +30,21 @@ However, it is possible to end up with non-ideal points/lines in a homography, i
 For any given Homography, there are an infinite amount of ideal points, which all are part of a single ideal line.
 
 \subsection*{Let l=(a, b, c) be a line. Give a formula for the following line representations}
+\subsubsection*{Axis intercept form}
+$$\frac{-xa}{c}-\frac{yb}{d}-1 = 0$$
+\subsubsection*{Hessian normal form}
+\begin{align*}
+\Phi &= atan\left(\frac{-b}{a}\right)\\
+d&= \sqrt{\frac{c^2}{a^2+b^2}} \\\\
+x\ cos(\Phi) &+ y\ sin(\Phi) -d = 0
+\end{align*}
 
 \subsection*{What is a Homography?}
 A Homography is any projective transformation which preserves straight lines and is invertible.
 
 \subsection*{Which conditions on the image acquisition have to be fulfilled in order to
 model the image transformation successfully as a 2D homography ?}
-
+There must be no rotation that is not around the projection axis. FUrthermore, the objects in the image should be far away from the projection plane.
 \subsection*{How many degrees of freedom does a 2D homography have?}
 A 2D Homography is a $3 \times 3$ Matrix, affecting homogeneous coordinates, leading to 9 variables. However, we can reduce this to 8, as $H$ and $\lambda H$ affect homogeneous coordinates the same way. So if we divide $H$ $h_{3,3}$, we end up with a Matrix with 8 Degrees of freedom, without changing the transformation itself: 
 $$\begin{pmatrix}
@@ -49,4 +57,5 @@ g & h & 1
 design matrix?}
 Making sure the points all have the same scale, improves numerical stability. Addition and Multiplication of very large and very small numbers leads to significant errors in floating point arithmetic.
 \subsection*{What are possible reasons the images don’t align perfectly?}
+The image might not align perfectly due to imperfectly chosen point-pairs or bad image acquisition. Whenever there are disparities between images, it might lead to bad alignment.
 \end{document}
