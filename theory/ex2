@@ -31,7 +31,7 @@ For any given Homography, there are an infinite amount of ideal points, which al
 
 \subsection*{Let l=(a, b, c) be a line. Give a formula for the following line representations}
 \subsubsection*{Axis intercept form}
-$$\frac{-xa}{c}-\frac{yb}{d}-1 = 0$$
+$$\frac{-xa}{c}-\frac{yb}{c}-1 = 0$$
 \subsubsection*{Hessian normal form}
 \begin{align*}
 \Phi &= atan\left(\frac{-b}{a}\right)\\
