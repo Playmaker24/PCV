@@ -253,8 +253,8 @@ void interprete(const cv::Matx34f &P, cv::Matx33f &K, cv::Matx33f &R, Projection
 
     for (int i = 0; i < 3; ++i) {
         if (K_temp(i, i) < 0) {
-            K_temp.row(i) *= -1;
-            R_temp.row(i) *= -1;
+            K_temp.row(i) = K_temp.row(i) * -1;
+            R_temp.row(i) = R_temp.row(i) * -1;
         }
     }
 
