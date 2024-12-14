@@ -30,7 +30,7 @@ std::vector<cv::Vec3f> applyH_2D(const std::vector<cv::Vec3f>& geomObjects, cons
     std::vector<cv::Vec3f> result;
     switch (type) {
         case GEOM_TYPE_POINT: {
-            for (const auto& obj : geomObjects) {
+            for (const auto& obj : geomObjects) {    
                 result.push_back(H*obj);
             }
         } break;
@@ -149,7 +149,7 @@ cv::Matx33f forceSingularity(const cv::Matx33f& F)
 cv::Matx33f decondition_fundamental(const cv::Matx33f& T1, const cv::Matx33f& T2, const cv::Matx33f& F)
 {
     // TO DO !!! Done
-    return T2.t() * forceSingularity(F) * T1;
+    return T2.t() * F * T1;
 }
 
 
