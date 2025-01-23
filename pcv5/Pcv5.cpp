@@ -856,6 +856,7 @@ void BundleAdjustment::BAState::update(const float *update, State *dst) const
         * update[intCalibOffset + i * NumUpdateParams::INTERNAL_CALIB + 2] is how much the principal point is supposed to shift in y direction (scaled by the old y position of the principal point)
         */
         state.m_internalCalibs[i].K(0, 0) += update[intCalibOffset + i * NumUpdateParams::INTERNAL_CALIB + 0] * m_internalCalibs[i].K(0, 0);
+        state.m_internalCalibs[i].K(1, 1) += update[intCalibOffset + i * NumUpdateParams::INTERNAL_CALIB + 0] * m_internalCalibs[i].K(1, 1);
         state.m_internalCalibs[i].K(0, 2) += update[intCalibOffset + i * NumUpdateParams::INTERNAL_CALIB + 1] * m_internalCalibs[i].K(0, 2);
         state.m_internalCalibs[i].K(1, 2) += update[intCalibOffset + i * NumUpdateParams::INTERNAL_CALIB + 2] * m_internalCalibs[i].K(1, 2);
 
