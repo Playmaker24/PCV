@@ -769,15 +769,13 @@ void BundleAdjustment::BAState::computeJacobiMatrix(JacobiMatrix *dst) const
             
             // TO DO !!!
             // How do the euclidean image positions change when the tracks are moving in eye space/camera space (the vector "v" in the slides)?
-            cv::Matx<float, 2, 4> J_v2eucl; // works like cv::Matx24f but the latter was not typedef-ed
+            cv::Matx<float, 2, 3> J_v2eucl; // works like cv::Matx24f but the latter was not typedef-ed
             J_v2eucl(0, 0) = 1.0f / v(2);
             J_v2eucl(0, 1) = 0.0f;         
             J_v2eucl(0, 2) = -v(0) / (v(2) * v(2));
-            J_v2eucl(0, 3) = 0.0f;         
             J_v2eucl(1, 0) = 0.0f;         
             J_v2eucl(1, 1) = 1.0f / v(2);  
             J_v2eucl(1, 2) = -v(1) / (v(2) * v(2));
-            J_v2eucl(1, 3) = 0.0f;    
             
             
             //cv::Matx36f dv_dDeltaH;
@@ -882,7 +880,7 @@ void BundleAdjustment::BAState::update(const float *update, State *dst) const
             update[cameraOffset + i * NumUpdateParams::CAMERA + 5]);
 
         cv::Matx44f rotation = rotationZ * rotationY * rotationX; // Apply rotations in order
-        state.m_cameras[i].H = rotation * m_cameras[i].H + translation;
+        state.m_cameras[i].H = translation*rotation * m_cameras[i].H;
 
     }
     unsigned trackOffset = cameraOffset + m_cameras.size() * NumUpdateParams::CAMERA;

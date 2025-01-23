@@ -4,9 +4,6 @@ project( pcv5 LANGUAGES CXX )
 
 find_package( OpenCV REQUIRED )
 
-
-
-
 add_library(code 
     Pcv5.cpp
     Pcv5.h
@@ -24,9 +21,6 @@ target_link_libraries(code
     PUBLIC
         opencv_core opencv_highgui opencv_imgproc opencv_calib3d
 )
-
-
-
 
 add_executable(main
     main.cpp 
