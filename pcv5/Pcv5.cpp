@@ -506,10 +506,10 @@ cv::Matx44f computeCameraPose(const cv::Matx33f &K, const std::vector<cv::Vec3f>
     cv::Matx33f U(svd.u);
     cv::Matx33f Vt(svd.vt);
     if (determinant(U) < 0) {
-        U.col(2) *= -1; 
+        U.col(2) = U.col(2)*-1.f;
     }
     if (determinant(Vt) < 0) {
-        Vt.row(2) *= -1;
+        Vt.row(2) = Vt.row(2)*-1;
     }
 
     Matx33f R1 = U * W * Vt;
@@ -691,15 +691,11 @@ void BundleAdjustment::BAState::computeResiduals(float *residuals) const
             
             // TO DO !!!
             // Compute the euclidean position of the track
-            cv::Vec2f projectedEuclidean = cv::Vec2f(
-                projection(0) / projection(2), 
-                projection(1) / projection(2)  
-            );
-            
+            cv::Vec2f projectedEuclidean = hom2eucl(projection);
             // TO DO !!!
             // Compute the residuals: the difference between computed position and real position (kp.location(0) and kp.location(1))
-            float dx = projectedEuclidean(0) - kp.location(0);   
-            float dy = projectedEuclidean(1) - kp.location(1); 
+            float dx = kp.location(0) - projectedEuclidean(0);
+            float dy = kp.location(1) - projectedEuclidean(1);
             // Compute and store the (signed!) residual in x direction multiplied by kp.weight
             residuals[rIdx++] = dx * kp.weight;
             // Compute and store the (signed!) residual in y direction multiplied by kp.weight
@@ -729,7 +725,6 @@ void BundleAdjustment::BAState::computeJacobiMatrix(JacobiMatrix *dst) const
 
             // TO DO !!!
             // Compute the positions before and after the internal calibration (compare to slides).
-
             cv::Vec3f v = H.get_minor<3, 4>(0, 0) * trackState.location;// = ...
             cv::Vec3f u = K * v;// = ...
             cv::Vec2f x = cv::Vec2f(u(0) / u(2), u(1) / u(2));
@@ -750,7 +745,6 @@ void BundleAdjustment::BAState::computeJacobiMatrix(JacobiMatrix *dst) const
             J_hom2eucl(1, 1) = 1.0f / u(2);
             J_hom2eucl(1, 2) = -u(1) / (u(2) * u(2));
 
-            
             cv::Matx33f du_dDeltaK;
 
             // TO DO !!!
@@ -776,13 +770,13 @@ void BundleAdjustment::BAState::computeJacobiMatrix(JacobiMatrix *dst) const
             // TO DO !!!
             // How do the euclidean image positions change when the tracks are moving in eye space/camera space (the vector "v" in the slides)?
             cv::Matx<float, 2, 4> J_v2eucl; // works like cv::Matx24f but the latter was not typedef-ed
-            J_v2eucl(0, 0) = 1.0f / v(2);      
+            J_v2eucl(0, 0) = 1.0f / v(2);
             J_v2eucl(0, 1) = 0.0f;         
-            J_v2eucl(0, 2) = -v(0) / (v(2) * v(2));  
+            J_v2eucl(0, 2) = -v(0) / (v(2) * v(2));
             J_v2eucl(0, 3) = 0.0f;         
             J_v2eucl(1, 0) = 0.0f;         
             J_v2eucl(1, 1) = 1.0f / v(2);  
-            J_v2eucl(1, 2) = -v(1) / (v(2) * v(2));  
+            J_v2eucl(1, 2) = -v(1) / (v(2) * v(2));
             J_v2eucl(1, 3) = 0.0f;    
             
             
@@ -791,25 +785,24 @@ void BundleAdjustment::BAState::computeJacobiMatrix(JacobiMatrix *dst) const
             
             // TO DO !!!
             // How do tracks move in eye space (vector "v" in slides) when the parameters of the camera are changed?
-
             dv_dDeltaH(0, 0) = 0;
             dv_dDeltaH(0, 1) = v(2);
             dv_dDeltaH(0, 2) = -v(1);
-            dv_dDeltaH(0, 3) = X(2);
+            dv_dDeltaH(0, 3) = X(3);
             dv_dDeltaH(0, 4) = 0;
             dv_dDeltaH(0, 5) = 0;
             dv_dDeltaH(1, 0) = -v(2);
             dv_dDeltaH(1, 1) = 0;
             dv_dDeltaH(1, 2) = v(0);
             dv_dDeltaH(1, 3) = 0;
-            dv_dDeltaH(1, 4) = X(2);
+            dv_dDeltaH(1, 4) = X(3);
             dv_dDeltaH(1, 5) = 0;
             dv_dDeltaH(2, 0) = v(1);
             dv_dDeltaH(2, 1) = -v(0);
             dv_dDeltaH(2, 2) = 0;
             dv_dDeltaH(2, 3) = 0;
             dv_dDeltaH(2, 4) = 0;
-            dv_dDeltaH(2, 5) = X(2);
+            dv_dDeltaH(2, 5) = X(3);
 
             
             // TO DO !!!
@@ -889,7 +882,6 @@ void BundleAdjustment::BAState::update(const float *update, State *dst) const
             update[cameraOffset + i * NumUpdateParams::CAMERA + 5]);
 
         cv::Matx44f rotation = rotationZ * rotationY * rotationX; // Apply rotations in order
-
         state.m_cameras[i].H = rotation * m_cameras[i].H + translation;
 
     }
